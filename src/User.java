@@ -3,7 +3,9 @@ import java.util.*;
 
 public class User {
 	private String name;
-	static Random rand = new Random();
+	Random rand = new Random();
+	private String identification;
+	private String vote;
 	
 	public static void main(String[] args){
 		/*System.out.println(getRandomNum(2));
@@ -18,7 +20,7 @@ public class User {
 		this.name = name;
 	}
 	
-	private static String getRandomNum(int numOfDigits)
+	public String getRandomNum(int numOfDigits)
 	{
 		String answer = "";
 		int max = 9;
@@ -30,6 +32,26 @@ public class User {
 			count++;
 		}
 		return answer;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public String getID(){
+		return identification;
+	}
+	
+	public void setID(String id){
+		identification = id;
+	}
+	
+	public void setVote(String vote){
+		this.vote = vote;
+	}
+	
+	public String getVote(){
+		return vote;
 	}
 
 }
