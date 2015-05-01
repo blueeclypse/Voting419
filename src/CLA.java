@@ -11,7 +11,7 @@ public class CLA extends Thread{
 		serverSocket = new ServerSocket(6066);
 		randomGen = new Random();
 		users = new Hashtable<String, Integer>();
-		serverSocket.setSoTimeout(10000);
+		serverSocket.setSoTimeout(30000);
 	}
 	
 	private int addToHash(String name) {
@@ -21,6 +21,7 @@ public class CLA extends Thread{
 		int id = randomGen.nextInt();
 		while (users.containsValue(id)) {
 			id = randomGen.nextInt();
+			System.out.println("TESTING");
 		}
 		Integer idNum = new Integer(id);
 		users.put(name, idNum);
@@ -43,8 +44,10 @@ public class CLA extends Thread{
 	            input = in.readUTF();
 	            System.out.println(input);
 	            int id = addToHash(input);
+	            System.out.println("id:"+id);
 	            DataOutputStream out = new DataOutputStream(server.getOutputStream());
-	            out.write(id);
+	            out.writeInt(id);
+	            System.out.println(users.toString());
 	            server.close();
 			} catch (SocketTimeoutException s) {
 				System.out.println("Socket timed out!");
@@ -57,9 +60,9 @@ public class CLA extends Thread{
 	}
 	
 	public static void main(String args[]) {
-		int port = Integer.parseInt(args[0]);
+		//int port = Integer.parseInt(args[0]);
 	     try {
-	    	 Thread t = new GreetingServer(port);
+	    	 Thread t = new CLA();
 	    	 t.start();
 	     } catch(IOException e) {
 	    	 e.printStackTrace();
