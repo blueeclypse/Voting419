@@ -21,7 +21,6 @@ public class CLA extends Thread{
 		int id = randomGen.nextInt();
 		while ((users.containsValue(id)) && (id >= 0)) {
 			id = randomGen.nextInt();
-			System.out.println("TESTING");
 		}
 		Integer idNum = new Integer(id);
 		users.put(name, idNum);
