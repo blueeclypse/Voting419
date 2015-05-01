@@ -5,16 +5,26 @@ import java.util.*;
 public class CLA extends Thread{
 	private ServerSocket serverSocket;
 	private Hashtable<String, Integer> users;
+	Random randomGen;
 	
-	public CLA (int port) throws IOException {
-		serverSocket = new ServerSocket(port);
+	public CLA () throws IOException {
+		serverSocket = new ServerSocket(6066);
+		randomGen = new Random();
 		users = new Hashtable<String, Integer>();
 		serverSocket.setSoTimeout(10000);
 	}
 	
-	private void addToHash(String name, int id) {
+	private int addToHash(String name) {
+		if (users.containsKey(name)) {
+			return 0;
+		}
+		int id = randomGen.nextInt();
+		while (users.containsValue(id)) {
+			id = randomGen.nextInt();
+		}
 		Integer idNum = new Integer(id);
 		users.put(name, idNum);
+		return id;
 	}
 	
 	private ArrayList<Integer> getIDs() {
@@ -29,9 +39,12 @@ public class CLA extends Thread{
 				Socket server = serverSocket.accept();
 	            System.out.println("Just connected to " + server.getRemoteSocketAddress());
 	            DataInputStream in = new DataInputStream(server.getInputStream());
-	            System.out.println(in.readUTF());
+	            String input = new String();
+	            input = in.readUTF();
+	            System.out.println(input);
+	            int id = addToHash(input);
 	            DataOutputStream out = new DataOutputStream(server.getOutputStream());
-	            out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress() + "\nGoodbye!");
+	            out.write(id);
 	            server.close();
 			} catch (SocketTimeoutException s) {
 				System.out.println("Socket timed out!");
