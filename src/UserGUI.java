@@ -8,6 +8,8 @@
  *
  * @author Hoang
  */
+import java.net.*;
+import java.io.*;
 public class UserGUI extends javax.swing.JFrame {
 
     /**
@@ -88,10 +90,38 @@ public class UserGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         //CODE FOR BUTTON
         
-        User newUser = new User(UserName.getText());
-        UserName.setVisible(false);
-        UserName.setEnabled(false);
-        UserName.setEditable(false);
+        //User newUser = new User(UserName.getText());
+        //UserName.setVisible(false);
+        //UserName.setEnabled(false);
+        //UserName.setEditable(false);
+        
+        String serverName = "localhost";
+        String temp = "6066";
+      int port = Integer.parseInt(temp);
+      try
+      {
+         System.out.println("Connecting to " + serverName
+                             + " on port " + port);
+         Socket client = new Socket(serverName, port);
+         System.out.println("Just connected to "
+                      + client.getRemoteSocketAddress());
+         OutputStream outToServer = client.getOutputStream();
+         DataOutputStream out =
+                       new DataOutputStream(outToServer);
+
+         //out.writeUTF("Hello from "+ client.getLocalSocketAddress());
+         out.writeUTF("The name is: " + UserName.getText());
+         InputStream inFromServer = client.getInputStream();
+         DataInputStream in =
+                        new DataInputStream(inFromServer);
+         System.out.println("Server says " + in.readUTF());
+         client.close();
+      }catch(IOException e)
+      {
+         e.printStackTrace();
+      }
+        
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void UserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserNameActionPerformed
