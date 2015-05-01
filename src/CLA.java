@@ -19,7 +19,7 @@ public class CLA extends Thread{
 			return 0;
 		}
 		int id = randomGen.nextInt();
-		while (users.containsValue(id)) {
+		while ((users.containsValue(id)) && (id >= 0)) {
 			id = randomGen.nextInt();
 		}
 		Integer idNum = new Integer(id);
@@ -37,14 +37,15 @@ public class CLA extends Thread{
 			try {
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
-	            System.out.println("Just connected to " + server.getRemoteSocketAddress());
+	            System.out.println("Just connected toasjdkfajsdf " + server.getRemoteSocketAddress());
 	            DataInputStream in = new DataInputStream(server.getInputStream());
 	            String input = new String();
 	            input = in.readUTF();
 	            System.out.println(input);
 	            int id = addToHash(input);
+	            System.out.println("id: " + id);
 	            DataOutputStream out = new DataOutputStream(server.getOutputStream());
-	            out.write(id);
+	            out.writeInt(id);
 	            server.close();
 			} catch (SocketTimeoutException s) {
 				System.out.println("Socket timed out!");
@@ -57,9 +58,9 @@ public class CLA extends Thread{
 	}
 	
 	public static void main(String args[]) {
-		int port = Integer.parseInt(args[0]);
+	//	int port = Integer.parseInt(args[0]);
 	     try {
-	    	 Thread t = new GreetingServer(port);
+	    	 Thread t = new CLA();
 	    	 t.start();
 	     } catch(IOException e) {
 	    	 e.printStackTrace();
