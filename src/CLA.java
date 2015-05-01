@@ -19,7 +19,7 @@ public class CLA extends Thread{
 			return 0;
 		}
 		int id = randomGen.nextInt();
-		while ((users.containsValue(id)) && (id >= 0)) {
+		while ((users.containsValue(id)) || (id <= 0)) {
 			id = randomGen.nextInt();
 		}
 		Integer idNum = new Integer(id);
