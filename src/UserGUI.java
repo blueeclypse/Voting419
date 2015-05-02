@@ -10,6 +10,8 @@
  */
 import java.net.*;
 import java.io.*;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 public class UserGUI extends javax.swing.JFrame {
 
     /**
@@ -80,18 +82,18 @@ String valid = "";
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(60, 60, 60)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(Text, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(UserName, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jButton3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton2))))
-                .addContainerGap(208, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(88, 88, 88)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton2))
+                    .addComponent(UserName)
+                    .addComponent(Text, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(87, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -127,8 +129,18 @@ String valid = "";
         //UserName.setEnabled(false);
         //UserName.setEditable(false);
         
-        
-        
+        if(UserName.getText().isEmpty()){
+            Text.setText("Please enter a name");
+        }
+        else if(UserName.getText().length() > 20){
+            Text.setText("Please enter a shorter name");
+        }
+        else if(UserName.getText().trim().length() == 0){
+            Text.setText("Please do not enter only spaces");
+            UserName.setText("");
+        }
+        else{
+        //WITHOUT SSL--------------------------------------------------------------------------------------------------
         String serverName = "localhost";
         String temp = "6066";
       int port = Integer.parseInt(temp);
@@ -148,6 +160,7 @@ String valid = "";
          System.out.println("Server says " + validation);
          valid = validation;
          Text.setText(UserName.getText() + ", your validation number is: "+validation);
+         jButton1.enable(false);
          client.close();
          
       }catch(IOException e)
@@ -157,7 +170,42 @@ String valid = "";
           System.out.println("CLA Server is not running");
       }
         
-        
+     //WITHOUOT SSL END--------------------------------------------------------------------------------------------------
+      
+      
+      
+      //WITH SSL---------------------------------------------------------------------------------------------------------
+      /*try {
+        	System.setProperty("javax.net.ssl.trustStore", "cacerts.jks");
+        	System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+            SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 9999);
+
+            InputStream inputstream = System.in;
+            InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
+            BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
+
+            OutputStream outputstream = sslsocket.getOutputStream();
+            OutputStreamWriter outputstreamwriter = new OutputStreamWriter(outputstream);
+            BufferedWriter bufferedwriter = new BufferedWriter(outputstreamwriter);
+            String string = UserName.getText();
+            bufferedwriter.write(string + '\n');
+            bufferedwriter.flush();
+            
+            InputStream inputstream2 = sslsocket.getInputStream();
+            InputStreamReader inputstreamreader2 = new InputStreamReader(inputstream2);
+            BufferedReader bufferedreader2 = new BufferedReader(inputstreamreader2);
+            String validation = bufferedreader.readLine();
+            System.out.println("Server says " + validation);
+            valid = validation;
+            Text.setText(UserName.getText() + ", your validation number is: "+validation);
+        } catch (Exception exception) {
+            //exception.printStackTrace();
+          Text.setText("The CLA server is not running");
+          System.out.println("CLA Server is not running");
+        }*/
+      //WITH SSL END---------------------------------------------------------------------------------------------------------
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void UserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UserNameActionPerformed

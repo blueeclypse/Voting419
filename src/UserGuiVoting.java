@@ -1,3 +1,11 @@
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -34,6 +42,7 @@ public class UserGuiVoting extends javax.swing.JFrame {
         Vote = new javax.swing.JList();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        Text = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -42,6 +51,8 @@ public class UserGuiVoting extends javax.swing.JFrame {
 
         jLabel2.setText("Enter your validation number:");
 
+        ValidationNumber.setText("empty");
+        ValidationNumber.setToolTipText("");
         ValidationNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ValidationNumberActionPerformed(evt);
@@ -49,6 +60,17 @@ public class UserGuiVoting extends javax.swing.JFrame {
         });
 
         jLabel3.setText("Choose your ID number:");
+
+        IDNumber.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                IDNumberFocusGained(evt);
+            }
+        });
+        IDNumber.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IDNumberActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Who are you voting for?");
 
@@ -73,6 +95,8 @@ public class UserGuiVoting extends javax.swing.JFrame {
             }
         });
 
+        Text.setText("jLabel5");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -92,8 +116,9 @@ public class UserGuiVoting extends javax.swing.JFrame {
                         .addGap(38, 38, 38)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(347, Short.MAX_VALUE))
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Text, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,7 +138,10 @@ public class UserGuiVoting extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Text, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
                 .addGap(5, 5, 5))
@@ -129,14 +157,60 @@ public class UserGuiVoting extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        System.out.println("Hi, " + ValidationNumber.getText() + ", with your ID: " + IDNumber.getText() + ", you voted for: " + Vote.getSelectedValue());
+        //System.out.println("Hi, " + ValidationNumber.getText() + ", with your ID: " + IDNumber.getText() + ", you voted for: " + Vote.getSelectedValue());
+        
+        //FORMAT: Validation, ID, vote
+        
+        String serverName = "localhost";
+        String temp = "6067";
+      int port = Integer.parseInt(temp);
+      try
+      {
+         System.out.println("Connecting to " + serverName+ " on port " + port);
+         Socket client = new Socket(serverName, port);
+         System.out.println("Just connected to "+ client.getRemoteSocketAddress());
+         OutputStream outToServer = client.getOutputStream();
+         DataOutputStream out =new DataOutputStream(outToServer);
+
+         //out.writeUTF("Hello from "+ client.getLocalSocketAddress());
+         int vote = Vote.getSelectedIndex() + 1;
+         out.writeUTF(ValidationNumber.getText() + ", " + IDNumber.getText() + ", " + vote);
+         InputStream inFromServer = client.getInputStream();
+         DataInputStream in =new DataInputStream(inFromServer);
+         String validation = ""+in.readInt();
+         System.out.println("Server says " + validation);
+         Text.setText("The server says: "+validation);
+         jButton1.enable(false);
+         client.close();
+         
+      }catch(IOException e)
+      {
+         //e.printStackTrace();
+          Text.setText("The CLA server is not running");
+          System.out.println("CLA Server is not running");
+      }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ValidationNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValidationNumberActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ValidationNumberActionPerformed
+
+    private void IDNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_IDNumberFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_IDNumberFocusGained
+
+    private void IDNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IDNumberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_IDNumberActionPerformed
     public void setValidation(String validation){
         ValidationNumber.setText(validation);
+        if(!(ValidationNumber.getText().equals("")))
+        {
+            IDNumber.requestFocusInWindow();
+            System.out.println("ITS EMPTY");
+        }
+        Text.setText("Enter your validation number, choose an ID, and choose someone to vote for");
     }
     /**
      * @param args the command line arguments
@@ -175,6 +249,7 @@ public class UserGuiVoting extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField IDNumber;
+    private javax.swing.JLabel Text;
     private javax.swing.JTextField ValidationNumber;
     private javax.swing.JList Vote;
     private javax.swing.JButton jButton1;

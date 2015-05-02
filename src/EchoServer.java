@@ -25,7 +25,12 @@ class EchoServer {
 
             String string = null;
             while ((string = bufferedreader.readLine()) != null) {
-                System.out.println(string);
+                if(string.equals("exit"))
+               {
+                   System.out.println("terminated");
+                   break;
+               }
+                System.out.println("text:" + string);
                 System.out.flush();
             }
         } catch (Exception exception) {
