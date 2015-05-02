@@ -32,15 +32,43 @@ public class CLA extends Thread{
 		return IDList;
 	}
 	
+	private void sendIDs(ArrayList<Integer> IDList){
+		ObjectOutputStream oos;
+		String serverName = "localhost";
+		int port = 6067;
+		try {
+			System.out.println("Connecting to " + serverName+ " on port " + port);
+	         Socket client = new Socket(serverName, port);
+	         System.out.println("Just connected to "+ client.getRemoteSocketAddress());
+	         OutputStream outToServer = client.getOutputStream();
+	         DataOutputStream out =new DataOutputStream(outToServer);
+
+	         //out.writeUTF("Hello from "+ client.getLocalSocketAddress());
+	         out.writeUTF("CLA");
+	         oos = new ObjectOutputStream(client.getOutputStream());
+	         oos.writeObject(IDList);
+		} catch(IOException e)
+	      {
+	         //e.printStackTrace();
+	          System.out.println("CLA Server is not running");
+	      }
+	}
+	
 	public void run() {
 		while (true) {
 			try {
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
-	            System.out.println("Just connected toasjdkfajsdf " + server.getRemoteSocketAddress());
+	            System.out.println("Just connected to " + server.getRemoteSocketAddress());
 	            DataInputStream in = new DataInputStream(server.getInputStream());
 	            String input = new String();
 	            input = in.readUTF();
+	            if (input.equals("CTF")) {
+	            	ArrayList<Integer> IDList = getIDs();
+	            	sendIDs(IDList);
+	            	System.out.println("closing");
+	            	break;
+	            }
 	            System.out.println(input);
 	            int id = addToHash(input);
 	            System.out.println("id:"+id);
