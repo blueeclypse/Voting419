@@ -186,8 +186,8 @@ public class UserGuiVoting extends javax.swing.JFrame {
       }catch(IOException e)
       {
          //e.printStackTrace();
-          Text.setText("The CLA server is not running");
-          System.out.println("CLA Server is not running");
+          Text.setText("The CTFserver is not running");
+          System.out.println("CTF Server is not running");
       }
         
     }//GEN-LAST:event_jButton1ActionPerformed

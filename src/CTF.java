@@ -18,7 +18,7 @@ public class CTF extends Thread{
 	
 	public boolean initialBoot() {
 		  String serverName = "localhost";
-	        String temp = "6066";
+	        String temp = "6067";
 	      int port = Integer.parseInt(temp);
 	      try
 	      {
