@@ -16,7 +16,32 @@ public class CTF extends Thread{
 		serverSocket.setSoTimeout(30000);
 	}
 	
+	public boolean initialBoot() {
+		  String serverName = "localhost";
+	        String temp = "6066";
+	      int port = Integer.parseInt(temp);
+	      try
+	      {
+	         System.out.println("Connecting to " + serverName+ " on port " + port);
+	         Socket client = new Socket(serverName, port);
+	         System.out.println("Just connected to "+ client.getRemoteSocketAddress());
+	         OutputStream outToServer = client.getOutputStream();
+	         DataOutputStream out =new DataOutputStream(outToServer);
+
+	         //out.writeUTF("Hello from "+ client.getLocalSocketAddress());
+	         out.writeUTF("CTF");
+	         client.close(); 
+	      } catch(IOException e)
+	      {
+	         //e.printStackTrace();
+	          System.out.println("CLA Server is not running");
+	          return false;
+	      }
+	      return true;
+	}
+	
 	public void run() {
+		initialBoot();
 		while (true) {
 			try {
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
@@ -41,8 +66,6 @@ public class CTF extends Thread{
 	            }
 	            int id = 0;
 	            System.out.println("id:"+id);
-	            DataOutputStream out = new DataOutputStream(server.getOutputStream());
-	            out.writeInt(id);
 	            System.out.println(users.toString());
 	            server.close();
 			} catch (SocketTimeoutException s) {
@@ -57,11 +80,11 @@ public class CTF extends Thread{
 	
 	public static void main(String args[]) {
 		//int port = Integer.parseInt(args[0]);
-	     try {
-	    	 Thread t = new CTF();
-	    	 t.start();
-	     } catch(IOException e) {
-	    	 e.printStackTrace();
-	     }
+	    try {
+	    	Thread t = new CTF();
+	    	t.start();
+	    } catch(IOException e) {
+	    	e.printStackTrace();
+	    }
 	}
 }
