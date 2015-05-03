@@ -155,7 +155,7 @@ String valid = "";
          DataOutputStream out =new DataOutputStream(outToServer);
 
          //out.writeUTF("Hello from "+ client.getLocalSocketAddress());
-         out.writeUTF("The name is: " + UserName.getText());
+         out.writeUTF(UserName.getText());
          InputStream inFromServer = client.getInputStream();
          DataInputStream in =new DataInputStream(inFromServer);
          String validation = ""+in.readInt();
@@ -191,7 +191,7 @@ String valid = "";
             OutputStreamWriter outputstreamwriter = new OutputStreamWriter(outputstream);
             BufferedWriter bufferedwriter = new BufferedWriter(outputstreamwriter);
             String string = UserName.getText();
-            bufferedwriter.write(string + '\n');
+            bufferedwriter.write(string);
             bufferedwriter.flush();
             
             InputStream inputstream2 = sslsocket.getInputStream();
