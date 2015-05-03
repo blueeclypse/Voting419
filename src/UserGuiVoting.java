@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -184,9 +187,14 @@ public class UserGuiVoting extends javax.swing.JFrame {
         }
         else
         {
-                 String serverName = "localhost";
-            String temp = "6067";
+          String serverName = "localhost";
+          String temp = "6067";
           int port = Integer.parseInt(temp);
+          System.setProperty("javax.net.ssl.trustStore", "cacerts.jks");
+      	  System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+          SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+          //WITHOUT SSL ------------------------
+          /*
           try
           {
              System.out.println("Connecting to " + serverName+ " on port " + port);
@@ -202,11 +210,33 @@ public class UserGuiVoting extends javax.swing.JFrame {
              DataInputStream in =new DataInputStream(inFromServer);
              String validation = ""+in.readInt();
              System.out.println("Server says " + validation);
-             Text.setText("The server says: "+validation);*/
+             Text.setText("The server says: "+validation);
              jButton1.enable(false);
              client.close();
 
-          }catch(IOException e)
+          } 
+*/        
+          //WITHOUT SSL ---------------------
+          //WITH SSL --------------------------------
+          try {
+        	  System.out.println("Connecting to " + serverName+ " on port " + port);
+         	 SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 6067);
+              //Socket client = new Socket(serverName, port);
+              System.out.println("Just connected to "+ sslsocket.getRemoteSocketAddress());
+              OutputStream outToServer = sslsocket.getOutputStream();
+              DataOutputStream out =new DataOutputStream(outToServer);
+
+              //out.writeUTF("Hello from "+ client.getLocalSocketAddress());
+              int vote = Vote.getSelectedIndex() + 1;
+              out.writeUTF(ValidationNumber.getText() + ", " + IDNumber.getText() + ", " + vote);
+              /*InputStream inFromServer = client.getInputStream();
+              DataInputStream in =new DataInputStream(inFromServer);
+              String validation = ""+in.readInt();
+              System.out.println("Server says " + validation);
+              Text.setText("The server says: "+validation);*/
+              jButton1.enable(false);
+          }
+          catch(IOException e)
           {
              //e.printStackTrace();
               Text.setText("The CTF server is not running");
