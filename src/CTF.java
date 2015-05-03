@@ -79,12 +79,12 @@ public class CTF extends Thread{
 	            	}
 	            }
 	            if (registeredUser) {
-	            	if (!alreadyVoted.contains(userID)) {
+	            	if (alreadyVoted.containsKey(userID) == false) {
 	            		voteTally[voteNum]++;
 	            		alreadyVoted.put(userID, voteNum);
 	            	}
 	            }
-	            System.out.println("Votes: " + voteTally.toString());
+	            System.out.println("Votes: " + voteTally[0] + "|" + voteTally[1] + "|" + voteTally[2] + "|" + voteTally[3] + "|" + voteTally[4] + "|");
 	            System.out.println("Already voted: " + alreadyVoted.toString());
 	            System.out.println(input);
 	            }
