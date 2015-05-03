@@ -11,7 +11,7 @@ public class CLA extends Thread{
 		serverSocket = new ServerSocket(6066);
 		randomGen = new Random();
 		users = new Hashtable<String, Integer>();
-		serverSocket.setSoTimeout(30000);
+		//serverSocket.setSoTimeout(30000);
 	}
 	
 	private int addToHash(String name) {

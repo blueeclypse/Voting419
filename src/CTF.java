@@ -13,12 +13,12 @@ public class CTF extends Thread{
 		serverSocket = new ServerSocket(6067);
 		randomGen = new Random();
 		users = new Hashtable<String, Integer>();
-		serverSocket.setSoTimeout(30000);
+		//serverSocket.setSoTimeout(30000);
 	}
 	
 	public boolean initialBoot() {
 		  String serverName = "localhost";
-	        String temp = "6066";
+	      String temp = "6066";
 	      int port = Integer.parseInt(temp);
 	      try
 	      {
@@ -64,9 +64,11 @@ public class CTF extends Thread{
 					}
 	            	
 	            }
-	            int id = 0;
-	            System.out.println("id:"+id);
-	            System.out.println(users.toString());
+	            StringTokenizer strtok = new StringTokenizer(input, ",");
+	            while(strtok.hasMoreTokens()) {
+	            	System.out.println(strtok.nextToken());
+	            }
+	            System.out.println(input);
 	            server.close();
 			} catch (SocketTimeoutException s) {
 				System.out.println("Socket timed out!");
