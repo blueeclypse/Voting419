@@ -162,7 +162,7 @@ public class UserGuiVoting extends javax.swing.JFrame {
         //FORMAT: Validation, ID, vote
         
         String serverName = "localhost";
-        String temp = "6067";
+        String temp = "6068";
       int port = Integer.parseInt(temp);
       try
       {

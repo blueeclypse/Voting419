@@ -11,7 +11,7 @@ public class CTF extends Thread{
 	Random randomGen;
 	
 	public CTF () throws IOException {
-		serverSocket = new ServerSocket(6067);
+		serverSocket = new ServerSocket(6068);
 		randomGen = new Random();
 		alreadyVoted = new Hashtable<Integer, Integer>();
 		voteTally = new int[5];
