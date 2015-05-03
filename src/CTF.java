@@ -6,13 +6,15 @@ import java.util.*;
 public class CTF extends Thread{
 	private ServerSocket serverSocket;
 	private ArrayList<Integer> idList;
-	private Hashtable<String, Integer> users;
+	private int[] voteTally;
+	private Hashtable<Integer, Integer> alreadyVoted;
 	Random randomGen;
 	
 	public CTF () throws IOException {
 		serverSocket = new ServerSocket(6067);
 		randomGen = new Random();
-		users = new Hashtable<String, Integer>();
+		alreadyVoted = new Hashtable<Integer, Integer>();
+		voteTally = new int[5];
 		//serverSocket.setSoTimeout(30000);
 	}
 	
@@ -69,6 +71,21 @@ public class CTF extends Thread{
 	            int userID = Integer.parseInt(strtok.nextToken().replaceAll("\\s", ""));
 	            int voteNum = Integer.parseInt(strtok.nextToken().replaceAll("\\s", ""));
 	            System.out.println("claID: " + claID + " userID: " + userID + " voteNum: " + voteNum);
+	            boolean registeredUser = false;
+	            for (int x = 0; x < idList.size(); x++) {
+	            	if (claID == idList.get(x)) {
+	            		registeredUser = true;
+	            		break;
+	            	}
+	            }
+	            if (registeredUser) {
+	            	if (!alreadyVoted.contains(userID)) {
+	            		voteTally[voteNum]++;
+	            		alreadyVoted.put(userID, voteNum);
+	            	}
+	            }
+	            System.out.println("Votes: " + voteTally.toString());
+	            System.out.println("Already voted: " + alreadyVoted.toString());
 	            System.out.println(input);
 	            server.close();
 			} catch (SocketTimeoutException s) {
