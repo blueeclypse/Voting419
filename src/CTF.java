@@ -65,9 +65,10 @@ public class CTF extends Thread{
 	            	
 	            }
 	            StringTokenizer strtok = new StringTokenizer(input, ",");
-	            while(strtok.hasMoreTokens()) {
-	            	System.out.println(strtok.nextToken());
-	            }
+	            int claID = Integer.parseInt(strtok.nextToken().replaceAll("\\s", ""));
+	            int userID = Integer.parseInt(strtok.nextToken().replaceAll("\\s", ""));
+	            int voteNum = Integer.parseInt(strtok.nextToken().replaceAll("\\s", ""));
+	            System.out.println("claID: " + claID + " userID: " + userID + " voteNum: " + voteNum);
 	            System.out.println(input);
 	            server.close();
 			} catch (SocketTimeoutException s) {
