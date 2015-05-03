@@ -6,19 +6,21 @@ import java.util.*;
 public class CTF extends Thread{
 	private ServerSocket serverSocket;
 	private ArrayList<Integer> idList;
-	private Hashtable<String, Integer> users;
+	private int[] voteTally;
+	private Hashtable<Integer, Integer> alreadyVoted;
 	Random randomGen;
 	
 	public CTF () throws IOException {
 		serverSocket = new ServerSocket(6067);
 		randomGen = new Random();
-		users = new Hashtable<String, Integer>();
-		serverSocket.setSoTimeout(30000);
+		alreadyVoted = new Hashtable<Integer, Integer>();
+		voteTally = new int[5];
+		//serverSocket.setSoTimeout(30000);
 	}
 	
 	public boolean initialBoot() {
 		  String serverName = "localhost";
-	        String temp = "6067";
+	      String temp = "6066";
 	      int port = Integer.parseInt(temp);
 	      try
 	      {
@@ -64,9 +66,27 @@ public class CTF extends Thread{
 					}
 	            	
 	            }
-	            int id = 0;
-	            System.out.println("id:"+id);
-	            System.out.println(users.toString());
+	            StringTokenizer strtok = new StringTokenizer(input, ",");
+	            int claID = Integer.parseInt(strtok.nextToken().replaceAll("\\s", ""));
+	            int userID = Integer.parseInt(strtok.nextToken().replaceAll("\\s", ""));
+	            int voteNum = Integer.parseInt(strtok.nextToken().replaceAll("\\s", ""));
+	            System.out.println("claID: " + claID + " userID: " + userID + " voteNum: " + voteNum);
+	            boolean registeredUser = false;
+	            for (int x = 0; x < idList.size(); x++) {
+	            	if (claID == idList.get(x)) {
+	            		registeredUser = true;
+	            		break;
+	            	}
+	            }
+	            if (registeredUser) {
+	            	if (!alreadyVoted.contains(userID)) {
+	            		voteTally[voteNum]++;
+	            		alreadyVoted.put(userID, voteNum);
+	            	}
+	            }
+	            System.out.println("Votes: " + voteTally.toString());
+	            System.out.println("Already voted: " + alreadyVoted.toString());
+	            System.out.println(input);
 	            server.close();
 			} catch (SocketTimeoutException s) {
 				System.out.println("Socket timed out!");
