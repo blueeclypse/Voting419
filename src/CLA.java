@@ -38,8 +38,8 @@ public class CLA extends Thread{
 		int port = 6067;
 		try {
 			System.out.println("Connecting to " + serverName+ " on port " + port);
-	         Socket client = new Socket(serverName, port);
-	         System.out.println("Just connected to "+ client.getRemoteSocketAddress());
+	        Socket client = new Socket(serverName, port);
+	        System.out.println("Just connected to "+ client.getRemoteSocketAddress());
 	         OutputStream outToServer = client.getOutputStream();
 	         DataOutputStream out =new DataOutputStream(outToServer);
 
@@ -53,7 +53,41 @@ public class CLA extends Thread{
 	          System.out.println("CLA Server is not running");
 	      }
 	}
-	
+	//without SSL -----------
+	/*
+	public void run() {
+		while (true) {
+			try {
+				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
+				Socket server = serverSocket.accept();
+	            System.out.println("Just connected to " + server.getRemoteSocketAddress());
+	            DataInputStream in = new DataInputStream(server.getInputStream());
+	            String input = new String();
+	            input = in.readUTF();
+	            if (input.equals("CTF")) {
+	            	ArrayList<Integer> IDList = getIDs();
+	            	sendIDs(IDList);
+	            	System.out.println("closing");
+	            	break;
+	            }
+	            System.out.println(input);
+	            int id = addToHash(input);
+	            System.out.println("id:"+id);
+	            DataOutputStream out = new DataOutputStream(server.getOutputStream());
+	            out.writeInt(id);
+	            System.out.println(users.toString());
+	            server.close();
+			} catch (SocketTimeoutException s) {
+				System.out.println("Socket timed out!");
+	            break;
+			} catch (IOException e) {
+				e.printStackTrace();
+				break;
+			}
+		}
+	}*/
+	//without SSL END --------
+	//with SSL -----------
 	public void run() {
 		while (true) {
 			try {
@@ -85,7 +119,7 @@ public class CLA extends Thread{
 			}
 		}
 	}
-	
+	//with SSL END --------
 	public static void main(String args[]) {
 		//int port = Integer.parseInt(args[0]);
 	     try {
