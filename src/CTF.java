@@ -20,7 +20,7 @@ public class CTF extends Thread{
 	
 	public boolean initialBoot() {
 		  String serverName = "localhost";
-	      String temp = "6066";
+	      String temp = "6067";
 	      int port = Integer.parseInt(temp);
 	      try
 	      {
@@ -47,7 +47,8 @@ public class CTF extends Thread{
 		while (true) {
 			try {
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
-				Socket server = serverSocket.accept();
+				//Socket server = serverSocket.accept();
+                                Socket server = new Socket("localhost", 6067);
 	            System.out.println("Just connected to " + server.getRemoteSocketAddress());
 	            DataInputStream in = new DataInputStream(server.getInputStream());
 	            String input = new String();

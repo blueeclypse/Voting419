@@ -175,11 +175,11 @@ public class UserGuiVoting extends javax.swing.JFrame {
          //out.writeUTF("Hello from "+ client.getLocalSocketAddress());
          int vote = Vote.getSelectedIndex() + 1;
          out.writeUTF(ValidationNumber.getText() + ", " + IDNumber.getText() + ", " + vote);
-         InputStream inFromServer = client.getInputStream();
+         /*InputStream inFromServer = client.getInputStream();
          DataInputStream in =new DataInputStream(inFromServer);
          String validation = ""+in.readInt();
          System.out.println("Server says " + validation);
-         Text.setText("The server says: "+validation);
+         Text.setText("The server says: "+validation);*/
          jButton1.enable(false);
          client.close();
          
