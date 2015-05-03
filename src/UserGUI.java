@@ -134,8 +134,8 @@ String valid = "";
         if(UserName.getText().isEmpty()){
             Text.setText("Please enter a name");
         }
-        else if(UserName.getText().length() > 20){
-            Text.setText("Please enter a shorter name");
+        else if(UserName.getText().length() > 21){
+            Text.setText("Please enter a shorter name(20 chars or less)");
         }
         else if(UserName.getText().trim().length() == 0){
             Text.setText("Please do not enter only spaces");

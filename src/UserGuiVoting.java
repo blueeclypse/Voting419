@@ -75,7 +75,7 @@ public class UserGuiVoting extends javax.swing.JFrame {
         jLabel4.setText("Who are you voting for?");
 
         Vote.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "George Washington", "John Adams", "Thomas Jefferson", "James Madison", "Abe Lincoln" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
@@ -161,35 +161,58 @@ public class UserGuiVoting extends javax.swing.JFrame {
         
         //FORMAT: Validation, ID, vote
         
-        String serverName = "localhost";
-        String temp = "6068";
-      int port = Integer.parseInt(temp);
-      try
-      {
-         System.out.println("Connecting to " + serverName+ " on port " + port);
-         Socket client = new Socket(serverName, port);
-         System.out.println("Just connected to "+ client.getRemoteSocketAddress());
-         OutputStream outToServer = client.getOutputStream();
-         DataOutputStream out =new DataOutputStream(outToServer);
+        //error checking
+        String number = ValidationNumber.getText();
+        String idNum = IDNumber.getText();
+        if(number.length() <= 0){
+            Text.setText("The validation number field is empty");
+        }
+        else if(number.length() > 0 && !number.matches("[0-9]+")){
+            Text.setText("The validation number is not a valid number");
+        }
+        else if(idNum.length() <= 0){
+            Text.setText("The ID number field is empty");
+        }
+        else if(idNum.length() >9){
+            Text.setText("The ID number must be less than 9 digits");
+        }
+        else if(idNum.length() > 0 && !idNum.matches("[0-9]+")){
+            Text.setText("The ID number is not a valid number");
+        }
+        else if(Vote.getSelectedIndex() < 0){
+            Text.setText("You did not vote, please select a name");
+        }
+        else
+        {
+                 String serverName = "localhost";
+            String temp = "6067";
+          int port = Integer.parseInt(temp);
+          try
+          {
+             System.out.println("Connecting to " + serverName+ " on port " + port);
+             Socket client = new Socket(serverName, port);
+             System.out.println("Just connected to "+ client.getRemoteSocketAddress());
+             OutputStream outToServer = client.getOutputStream();
+             DataOutputStream out =new DataOutputStream(outToServer);
 
-         //out.writeUTF("Hello from "+ client.getLocalSocketAddress());
-         int vote = Vote.getSelectedIndex() + 1;
-         out.writeUTF(ValidationNumber.getText() + ", " + IDNumber.getText() + ", " + vote);
-         /*InputStream inFromServer = client.getInputStream();
-         DataInputStream in =new DataInputStream(inFromServer);
-         String validation = ""+in.readInt();
-         System.out.println("Server says " + validation);
-         Text.setText("The server says: "+validation);*/
-         jButton1.enable(false);
-         client.close();
-         
-      }catch(IOException e)
-      {
-         //e.printStackTrace();
-          Text.setText("The CTFserver is not running");
-          System.out.println("CTF Server is not running");
-      }
-        
+             //out.writeUTF("Hello from "+ client.getLocalSocketAddress());
+             int vote = Vote.getSelectedIndex() + 1;
+             out.writeUTF(ValidationNumber.getText() + ", " + IDNumber.getText() + ", " + vote);
+             /*InputStream inFromServer = client.getInputStream();
+             DataInputStream in =new DataInputStream(inFromServer);
+             String validation = ""+in.readInt();
+             System.out.println("Server says " + validation);
+             Text.setText("The server says: "+validation);*/
+             jButton1.enable(false);
+             client.close();
+
+          }catch(IOException e)
+          {
+             //e.printStackTrace();
+              Text.setText("The CTF server is not running");
+              System.out.println("CTF Server is not running");
+          }
+        } 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void ValidationNumberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValidationNumberActionPerformed
@@ -208,7 +231,7 @@ public class UserGuiVoting extends javax.swing.JFrame {
         if(!(ValidationNumber.getText().equals("")))
         {
             IDNumber.requestFocusInWindow();
-            System.out.println("ITS EMPTY");
+            //System.out.println("ITS EMPTY");
         }
         Text.setText("Enter your validation number, choose an ID, and choose someone to vote for");
     }

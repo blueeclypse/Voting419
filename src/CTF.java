@@ -10,7 +10,7 @@ public class CTF extends Thread {
 	private Hashtable<Integer, Integer> alreadyVoted;
 	Random randomGen;
 	public CTF () throws IOException {
-		serverSocket = new ServerSocket(6068);
+		serverSocket = new ServerSocket(6067);
 		randomGen = new Random();
 		alreadyVoted = new Hashtable<Integer, Integer>();
 		voteTally = new int[5];
