@@ -2,15 +2,23 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
+
 public class CLA extends Thread{
 	private ServerSocket serverSocket;
 	private Hashtable<String, Integer> users;
+	private SSLServerSocket sslServerSocket;
 	Random randomGen;
 	
 	public CLA () throws IOException {
-		serverSocket = new ServerSocket(6066);
+		//serverSocket = new ServerSocket(6066);
 		randomGen = new Random();
 		users = new Hashtable<String, Integer>();
+        System.setProperty("javax.net.ssl.keyStore", "keystore.jks");
+    	System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
+        sslServerSocket = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket(6066);
 		//serverSocket.setSoTimeout(30000);
 	}
 	
@@ -91,10 +99,9 @@ public class CLA extends Thread{
 	public void run() {
 		while (true) {
 			try {
-				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
-				Socket server = serverSocket.accept();
-	            System.out.println("Just connected to " + server.getRemoteSocketAddress());
-	            DataInputStream in = new DataInputStream(server.getInputStream());
+				System.out.println("Waiting for client on port " + sslServerSocket.getLocalPort() + "...");
+	            SSLSocket sslsocket = (SSLSocket) sslServerSocket.accept();
+	            DataInputStream in = new DataInputStream(sslsocket.getInputStream());
 	            String input = new String();
 	            input = in.readUTF();
 	            if (input.equals("CTF")) {
@@ -106,10 +113,9 @@ public class CLA extends Thread{
 	            System.out.println(input);
 	            int id = addToHash(input);
 	            System.out.println("id:"+id);
-	            DataOutputStream out = new DataOutputStream(server.getOutputStream());
+	            DataOutputStream out = new DataOutputStream(sslsocket.getOutputStream());
 	            out.writeInt(id);
 	            System.out.println(users.toString());
-	            server.close();
 			} catch (SocketTimeoutException s) {
 				System.out.println("Socket timed out!");
 	            break;
