@@ -5,6 +5,7 @@ import java.util.*;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 public class CLA extends Thread{
 	private ServerSocket serverSocket;
@@ -18,6 +19,8 @@ public class CLA extends Thread{
 		users = new Hashtable<String, Integer>();
         System.setProperty("javax.net.ssl.keyStore", "keystore.jks");
     	System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
+    	System.setProperty("javax.net.ssl.trustStore", "cacerts.jks");
+    	System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
         sslServerSocket = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket(6066);
 		//serverSocket.setSoTimeout(30000);
 	}
@@ -44,16 +47,18 @@ public class CLA extends Thread{
 		ObjectOutputStream oos;
 		String serverName = "localhost";
 		int port = 6067;
+        SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 		try {
+	   	 	SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 6067);
 			System.out.println("Connecting to " + serverName+ " on port " + port);
-	        Socket client = new Socket(serverName, port);
-	        System.out.println("Just connected to "+ client.getRemoteSocketAddress());
-	         OutputStream outToServer = client.getOutputStream();
+	       // Socket client = new Socket(serverName, port);
+	        System.out.println("Just connected to "+ sslsocket.getRemoteSocketAddress());
+	         OutputStream outToServer = sslsocket.getOutputStream();
 	         DataOutputStream out =new DataOutputStream(outToServer);
 
 	         //out.writeUTF("Hello from "+ client.getLocalSocketAddress());
 	         out.writeUTF("CLA");
-	         oos = new ObjectOutputStream(client.getOutputStream());
+	         oos = new ObjectOutputStream(sslsocket.getOutputStream());
 	         oos.writeObject(IDList);
 		} catch(IOException e)
 	      {
