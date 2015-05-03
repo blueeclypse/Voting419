@@ -20,7 +20,7 @@ public class CTF extends Thread{
 	
 	public boolean initialBoot() {
 		  String serverName = "localhost";
-	      String temp = "6067";
+	      String temp = "6066";
 	      int port = Integer.parseInt(temp);
 	      try
 	      {
@@ -47,8 +47,8 @@ public class CTF extends Thread{
 		while (true) {
 			try {
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
-				//Socket server = serverSocket.accept();
-                                Socket server = new Socket("localhost", 6067);
+				Socket server = serverSocket.accept();
+                //                Socket server = new Socket("localhost", 6067);
 	            System.out.println("Just connected to " + server.getRemoteSocketAddress());
 	            DataInputStream in = new DataInputStream(server.getInputStream());
 	            String input = new String();
@@ -66,7 +66,7 @@ public class CTF extends Thread{
 						e.printStackTrace();
 					}
 	            	
-	            }
+	            } else {
 	            StringTokenizer strtok = new StringTokenizer(input, ",");
 	            int claID = Integer.parseInt(strtok.nextToken().replaceAll("\\s", ""));
 	            int userID = Integer.parseInt(strtok.nextToken().replaceAll("\\s", ""));
@@ -88,6 +88,7 @@ public class CTF extends Thread{
 	            System.out.println("Votes: " + voteTally.toString());
 	            System.out.println("Already voted: " + alreadyVoted.toString());
 	            System.out.println(input);
+	            }
 	            server.close();
 			} catch (SocketTimeoutException s) {
 				System.out.println("Socket timed out!");
