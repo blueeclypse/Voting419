@@ -3,20 +3,28 @@ import java.nio.channels.Channels;
 import java.io.*;
 import java.util.*;
 
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+
 public class CTF extends Thread {
 	private ServerSocket serverSocket;
+	private SSLServerSocket sslServerSocket;
 	private ArrayList<Integer> idList;
 	private int[] voteTally;
 	private Hashtable<Integer, Integer> alreadyVoted;
 	Random randomGen;
 	public CTF () throws IOException {
-		serverSocket = new ServerSocket(6067);
+		//serverSocket = new ServerSocket(6067);
 		randomGen = new Random();
 		alreadyVoted = new Hashtable<Integer, Integer>();
 		voteTally = new int[5];
+        System.setProperty("javax.net.ssl.keyStore", "keystore.jks");
+    	System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
+        sslServerSocket = (SSLServerSocket) SSLServerSocketFactory.getDefault().createServerSocket(6067);
 		// serverSocket.setSoTimeout(30000);
 	}
-
+//WITHOUT SSL --------------------
+	/*
 	public boolean initialBoot() {
 		String serverName = "localhost";
 		String temp = "6066";
@@ -40,7 +48,31 @@ public class CTF extends Thread {
 		}
 		return true;
 	}
+	*/
+//WITHOUT SSL END---------------------------
+	public boolean initialBoot() {
+		String serverName = "localhost";
+		String temp = "6066";
+		int port = Integer.parseInt(temp);
+		try {
+			System.out.println("Connecting to " + serverName + " on port "
+					+ port);
+			Socket client = new Socket(serverName, port);
+			System.out.println("Just connected to "
+					+ client.getRemoteSocketAddress());
+			OutputStream outToServer = client.getOutputStream();
+			DataOutputStream out = new DataOutputStream(outToServer);
 
+			// out.writeUTF("Hello from "+ client.getLocalSocketAddress());
+			out.writeUTF("CTF");
+			client.close();
+		} catch (IOException e) {
+			// e.printStackTrace();
+			System.out.println("CLA Server is not running");
+			return false;
+		}
+		return true;
+	}
 	public void run() {
 		initialBoot();
 		while (true) {
