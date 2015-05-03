@@ -48,7 +48,6 @@ public class CTF extends Thread{
 			try {
 				System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
 				Socket server = serverSocket.accept();
-                //                Socket server = new Socket("localhost", 6067);
 	            System.out.println("Just connected to " + server.getRemoteSocketAddress());
 	            DataInputStream in = new DataInputStream(server.getInputStream());
 	            String input = new String();
