@@ -143,6 +143,7 @@ String valid = "";
         }
         else{
         //WITHOUT SSL--------------------------------------------------------------------------------------------------
+        	/*
         String serverName = "localhost";
         String temp = "6066";
       int port = Integer.parseInt(temp);
@@ -171,17 +172,53 @@ String valid = "";
           Text.setText("The CLA server is not running");
           System.out.println("CLA Server is not running");
       }
-        
+       */ 
      //WITHOUOT SSL END--------------------------------------------------------------------------------------------------
       
-      
+      //WITH SSL AISER ----------------
+            String serverName = "localhost";
+            String temp = "6066";
+            System.setProperty("javax.net.ssl.trustStore", "cacerts.jks");
+        	System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+            SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+            
+          int port = Integer.parseInt(temp);
+          try
+          {
+        	 SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 6066);
+             System.out.println("Connecting to " + serverName+ " on port " + port);
+             //Socket client = new Socket(serverName, port);
+             System.out.println("Just connected to "+ sslsocket.getRemoteSocketAddress());
+             OutputStream outToServer = sslsocket.getOutputStream();
+             DataOutputStream out =new DataOutputStream(outToServer);
+
+             //out.writeUTF("Hello from "+ client.getLocalSocketAddress());
+             out.writeUTF(UserName.getText());
+             InputStream inFromServer = sslsocket.getInputStream();
+             DataInputStream in =new DataInputStream(inFromServer);
+             String validation = ""+in.readInt();
+             System.out.println("Server says " + validation);
+             valid = validation;
+             Text.setText(UserName.getText() + ", your validation number is: "+validation);
+             jButton1.enable(false);
+            // client.close();
+             
+          }catch(IOException e)
+          {
+             //e.printStackTrace();
+              Text.setText("The CLA server is not running");
+              System.out.println("CLA Server is not running");
+          }
+        	
+      //WITH SSL AISER END -----------------------
       
       //WITH SSL---------------------------------------------------------------------------------------------------------
-      /*try {
+        	/*
+      try {
         	System.setProperty("javax.net.ssl.trustStore", "cacerts.jks");
         	System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
             SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-            SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 9999);
+            SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 6066);
 
             InputStream inputstream = System.in;
             InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
@@ -191,6 +228,8 @@ String valid = "";
             OutputStreamWriter outputstreamwriter = new OutputStreamWriter(outputstream);
             BufferedWriter bufferedwriter = new BufferedWriter(outputstreamwriter);
             String string = UserName.getText();
+            DataOutputStream out =new DataOutputStream(outputstream);
+            out.writeUTF(UserName.getText());
             bufferedwriter.write(string);
             bufferedwriter.flush();
             
@@ -205,7 +244,8 @@ String valid = "";
             //exception.printStackTrace();
           Text.setText("The CLA server is not running");
           System.out.println("CLA Server is not running");
-        }*/
+        }
+      */
       //WITH SSL END---------------------------------------------------------------------------------------------------------
         }
     }//GEN-LAST:event_jButton1ActionPerformed
