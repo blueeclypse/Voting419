@@ -216,8 +216,11 @@ public class CTF extends Thread {
 							out.writeUTF("success");
 						}
 						else {
-							out.writeUTF("failure");
+							out.writeUTF("that user ID already voted");
 						}
+					}
+					else {
+						out.writeUTF("not a registered validation number");
 					}
 					System.out.println("Votes: " + voteTally[0] + "|"
 							+ voteTally[1] + "|" + voteTally[2] + "|"
