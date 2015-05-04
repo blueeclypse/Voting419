@@ -79,11 +79,12 @@ public class UserGuiVoting extends javax.swing.JFrame {
         jLabel4.setText("Who are you voting for?");
 
         Vote.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "George Washington", "John Adams", "Thomas Jefferson", "James Madison", "Abe Lincoln" };
+            String[] strings = {"Select an option", "George Washington", "John Adams", "Thomas Jefferson", "James Madison", "Abe Lincoln" };
             public int getSize() { return strings.length; }
             public Object getElementAt(int i) { return strings[i]; }
         });
         jScrollPane1.setViewportView(Vote);
+        Vote.setSelectedIndex(0);
 
         jButton1.setText("Submit Vote");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -196,7 +197,7 @@ public class UserGuiVoting extends javax.swing.JFrame {
         else if(idNum.length() > 0 && !idNum.matches("[0-9]+")){
             Text.setText("The ID number is not a valid number");
         }
-        else if(Vote.getSelectedIndex() < 0){
+        else if(Vote.getSelectedIndex() < 1){
             Text.setText("You did not vote, please select a name");
         }
         else
@@ -241,13 +242,21 @@ public class UserGuiVoting extends javax.swing.JFrame {
               DataOutputStream out =new DataOutputStream(outToServer);
 
               //out.writeUTF("Hello from "+ client.getLocalSocketAddress());
-              int vote = Vote.getSelectedIndex() + 1;
+              int vote = Vote.getSelectedIndex()-1;
               out.writeUTF(ValidationNumber.getText() + ", " + IDNumber.getText() + ", " + vote);
               InputStream inFromServer = sslsocket.getInputStream();
               DataInputStream in =new DataInputStream(inFromServer);
               String validation = ""+in.readUTF();
               //System.out.println("Server says " + validation);
-              Text.setText(validation);
+              if(validation.equals("success")){
+            	  ValidationNumber.setText("");
+            	  IDNumber.setText("");
+            	  Vote.setSelectedIndex(0);
+            	  Text.setText("Success! Your vote has been cast");
+              }
+              else{
+            	  Text.setText(validation);
+              }
               jButton1.enable(false);
               
           }
