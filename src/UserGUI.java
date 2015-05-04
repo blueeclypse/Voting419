@@ -186,9 +186,9 @@ String valid = "";
           try
           {
         	 SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 6066);
-             System.out.println("Connecting to " + serverName+ " on port " + port);
+             //System.out.println("Connecting to " + serverName+ " on port " + port);
              //Socket client = new Socket(serverName, port);
-             System.out.println("Just connected to "+ sslsocket.getRemoteSocketAddress());
+             //System.out.println("Just connected to "+ sslsocket.getRemoteSocketAddress());
              OutputStream outToServer = sslsocket.getOutputStream();
              DataOutputStream out =new DataOutputStream(outToServer);
 
@@ -196,11 +196,16 @@ String valid = "";
              out.writeUTF(UserName.getText());
              InputStream inFromServer = sslsocket.getInputStream();
              DataInputStream in =new DataInputStream(inFromServer);
-             String validation = ""+in.readInt();
-             System.out.println("Server says " + validation);
-             valid = validation;
-             Text.setText(UserName.getText() + ", your validation number is: "+validation);
-             jButton1.enable(false);
+             int validation = in.readInt();
+             if(validation == 0){
+                 Text.setText("This name has already been registered");
+             }   
+             else{
+                 valid = validation+"";
+                 Text.setText(UserName.getText() + ", your validation number is: "+validation);
+                 UserName.setText("");
+                 jButton1.setEnabled(false);
+             }
             // client.close();
              
           }catch(IOException e)
