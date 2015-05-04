@@ -207,11 +207,16 @@ public class CTF extends Thread {
 							break;
 						}
 					}
+					DataOutputStream out = new DataOutputStream(server.getOutputStream());
 					if (registeredUser) {
 						if (alreadyVoted.get(claID) == false) {
 							voteTally[voteNum]++;
 							alreadyVoted.put(claID, true);
 							successfulVotes.put(userID, voteNum);
+							out.writeUTF("success");
+						}
+						else {
+							out.writeUTF("failure");
 						}
 					}
 					System.out.println("Votes: " + voteTally[0] + "|"
