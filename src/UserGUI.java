@@ -204,7 +204,7 @@ String valid = "";
                  valid = validation+"";
                  Text.setText(UserName.getText() + ", your validation number is: "+validation);
                  UserName.setText("");
-                 jButton1.setEnabled(false);
+                 //jButton1.setEnabled(false);
              }
             // client.close();
              
