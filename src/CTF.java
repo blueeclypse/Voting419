@@ -185,7 +185,7 @@ public class CTF extends Thread {
 					System.out.println("Votes: " + voteTally[0] + "|"
 							+ voteTally[1] + "|" + voteTally[2] + "|"
 							+ voteTally[3] + "|" + voteTally[4] + "|");
-					System.out.println("Already voted: "
+					System.out.println("All users: "
 							+ alreadyVoted.toString());
 					System.out.println("closing");
 					break;
