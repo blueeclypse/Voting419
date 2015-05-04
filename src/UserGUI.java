@@ -212,7 +212,7 @@ String valid = "";
           {
              //e.printStackTrace();
               Text.setText("The CLA server is not running");
-              System.out.println("CLA Server is not running");
+              //System.out.println("CLA Server is not running");
           }
         	
       //WITH SSL AISER END -----------------------

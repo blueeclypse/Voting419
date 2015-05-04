@@ -234,10 +234,10 @@ public class UserGuiVoting extends javax.swing.JFrame {
           //WITHOUT SSL ---------------------
           //WITH SSL --------------------------------
           try {
-        	  System.out.println("Connecting to " + serverName+ " on port " + port);
+        	  //System.out.println("Connecting to " + serverName+ " on port " + port);
          	 SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 6067);
               //Socket client = new Socket(serverName, port);
-              System.out.println("Just connected to "+ sslsocket.getRemoteSocketAddress());
+              //System.out.println("Just connected to "+ sslsocket.getRemoteSocketAddress());
               OutputStream outToServer = sslsocket.getOutputStream();
               DataOutputStream out =new DataOutputStream(outToServer);
 
@@ -292,10 +292,10 @@ public class UserGuiVoting extends javax.swing.JFrame {
       	  System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
           SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
         try {
-        	  System.out.println("ending the CTF");
+        	  //System.out.println("ending the CTF");
          	 SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 6067);
               //Socket client = new Socket(serverName, port);
-              System.out.println("Ending CTF: Just connected to "+ sslsocket.getRemoteSocketAddress());
+              //System.out.println("Ending CTF: Just connected to "+ sslsocket.getRemoteSocketAddress());
               OutputStream outToServer = sslsocket.getOutputStream();
               DataOutputStream out =new DataOutputStream(outToServer);
 
@@ -313,7 +313,7 @@ public class UserGuiVoting extends javax.swing.JFrame {
           {
              //e.printStackTrace();
               Text.setText("The CTF server is not running");
-              System.out.println("CTF Server is not running");
+              //System.out.println("CTF Server is not running");
           }
         
     }//GEN-LAST:event_jButton3ActionPerformed
