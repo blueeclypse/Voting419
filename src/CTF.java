@@ -210,13 +210,18 @@ public class CTF extends Thread {
 					DataOutputStream out = new DataOutputStream(server.getOutputStream());
 					if (registeredUser) {
 						if (alreadyVoted.get(claID) == false) {
-							voteTally[voteNum]++;
-							alreadyVoted.put(claID, true);
-							successfulVotes.put(userID, voteNum);
-							out.writeUTF("success");
+							if (successfulVotes.containsKey(userID) == false) {
+								voteTally[voteNum]++;
+								alreadyVoted.put(claID, true);
+								successfulVotes.put(userID, voteNum);
+								out.writeUTF("success");
+							}
+							else {
+								out.writeUTF("that user ID already exists");
+							}
 						}
 						else {
-							out.writeUTF("that user ID already voted");
+							out.writeUTF("that validation ID already voted");
 						}
 					}
 					else {
