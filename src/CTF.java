@@ -13,12 +13,14 @@ public class CTF extends Thread {
 	private SSLServerSocket sslServerSocket;
 	private ArrayList<Integer> idList;
 	private int[] voteTally;
-	private Hashtable<Integer, Integer> alreadyVoted;
+	private Hashtable<Integer, Integer> successfulVotes;
+	private Hashtable<Integer, Boolean> alreadyVoted;
 	Random randomGen;
 	public CTF () throws IOException {
 		//serverSocket = new ServerSocket(6067);
 		randomGen = new Random();
-		alreadyVoted = new Hashtable<Integer, Integer>();
+		successfulVotes = new Hashtable<Integer, Integer>();
+		alreadyVoted = new Hashtable<Integer, Boolean>();
 		voteTally = new int[5];
         System.setProperty("javax.net.ssl.keyStore", "keystore.jks");
     	System.setProperty("javax.net.ssl.keyStorePassword", "changeit");
@@ -169,6 +171,9 @@ public class CTF extends Thread {
 						obj = ois.readObject();
 						ArrayList<Integer> obj2 = (ArrayList<Integer>) obj;
 						idList = obj2;
+						for (int x =0; x < idList.size(); x++) {
+							alreadyVoted.put(idList.get(x), false);
+						}
 						System.out.println(idList.toString());
 					} catch (ClassNotFoundException e) {
 						// TODO Auto-generated catch block
@@ -203,16 +208,18 @@ public class CTF extends Thread {
 						}
 					}
 					if (registeredUser) {
-						if (alreadyVoted.containsKey(userID) == false) {
+						if (alreadyVoted.get(claID) == false) {
 							voteTally[voteNum]++;
-							alreadyVoted.put(userID, voteNum);
+							alreadyVoted.put(claID, true);
+							successfulVotes.put(userID, voteNum);
 						}
 					}
 					System.out.println("Votes: " + voteTally[0] + "|"
 							+ voteTally[1] + "|" + voteTally[2] + "|"
 							+ voteTally[3] + "|" + voteTally[4] + "|");
-					System.out.println("Already voted: "
-							+ alreadyVoted.toString());
+					System.out.println("Users that voted: " + alreadyVoted.toString());
+					System.out.println("Successful Votes: "
+							+ successfulVotes.toString());
 					System.out.println(input);
 				}
 				server.close();
