@@ -116,10 +116,16 @@ public class CLA extends Thread{
 	            	break;
 	            }
 	            System.out.println(input);
-	            int id = addToHash(input);
-	            System.out.println("id:"+id);
-	            DataOutputStream out = new DataOutputStream(sslsocket.getOutputStream());
-	            out.writeInt(id);
+	            if (users.contains(input) == false) {
+	            	int id = addToHash(input);
+	            	System.out.println("id:"+id);
+	            	DataOutputStream out = new DataOutputStream(sslsocket.getOutputStream());
+	            	out.writeInt(id);
+	            }
+	            else {
+	            	DataOutputStream out = new DataOutputStream(sslsocket.getOutputStream());
+	            	out.writeInt(0);
+	            }
 	            System.out.println(users.toString());
 			} catch (SocketTimeoutException s) {
 				System.out.println("Socket timed out!");
